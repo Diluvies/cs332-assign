@@ -17,10 +17,34 @@ object Main {
    * Exercise 1
    */
   def pascal(c: Int, r: Int): Int = {
-    if (c == 0 || c == r)
+    @tailrec
+    def pascalTail(col: Int, row: Int, prevRowNumbs: Array[Int], currRowNumbs: Array[Int]): Int = {
+      val left = {
+        if (col > 0)
+          prevRowNumbs(col - 1)
+        else
+          0
+      }
+      val right = {
+        if (col < row)
+          prevRowNumbs(col)
+        else
+          0
+      }
+      currRowNumbs(col) = left + right
+
+      if (col == c && row == r)
+        currRowNumbs(col)
+      else if (col < row)
+        pascalTail(col + 1, row, prevRowNumbs, currRowNumbs)
+      else  // reached end of that row -> start from col = 0, row = row + 1
+        pascalTail(0, row + 1, currRowNumbs, new Array(_length = row + 2))
+    }
+
+    if (c == 0 || c == r)   // edges
       1
     else
-      pascal(c-1, r-1) + pascal(c, r-1)
+      pascalTail(0, 1, Array(1), new Array(_length = 2))
   }
 
   /**
