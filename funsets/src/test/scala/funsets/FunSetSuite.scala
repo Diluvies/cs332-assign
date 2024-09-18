@@ -29,7 +29,7 @@ class FunSetSuite extends FunSuite {
   /**
    * Tests are written using the "test" operator and the "assert" method.
    */
-  test("string take") {
+  ignore("string take") {
     val message = "hello, world"
     assert(message.take(5) == "hello")
   }
@@ -43,14 +43,14 @@ class FunSetSuite extends FunSuite {
    * Try it out! Change the values so that the assertion fails, and look at the
    * error message.
    */
-  test("adding ints") {
+  ignore("adding ints") {
     assert(1 + 2 === 3)
   }
 
   
   import FunSets._
 
-  test("contains is implemented") {
+  ignore("contains is implemented") {
     assert(contains(x => true, 100))
   }
   
@@ -86,7 +86,7 @@ class FunSetSuite extends FunSuite {
    * Once you finish your implementation of "singletonSet", exchange the
    * function "ignore" by "test".
    */
-  ignore("singletonSet(1) contains 1") {
+  test("singletonSet(1) contains 1") {
     
     /**
      * We create a new instance of the "TestSets" trait, this gives us access
@@ -101,12 +101,41 @@ class FunSetSuite extends FunSuite {
     }
   }
 
-  ignore("union contains all elements") {
+  test("union contains all elements") {
     new TestSets {
       val s = union(s1, s2)
       assert(contains(s, 1), "Union 1")
       assert(contains(s, 2), "Union 2")
       assert(!contains(s, 3), "Union 3")
+    }
+  }
+
+  test("intersect contains intersecting elements") {
+    new TestSets {
+      val u1 = union(s1, s2)
+      val u2 = union(s1, s3)
+      val i = intersect(u1, u2)
+      assert(contains(i, 1), "Intersect 1")
+    }
+  }
+
+  test("diff contains different elements") {
+    new TestSets {
+      val u1 = union(s1, s2)
+      val u2 = union(s1, s3)
+      val d1 = diff(u1, u2)
+      val d2 = diff(u2, u1)
+      assert(contains(d1, 2), "Diff 2")
+      assert(contains(d2, 3), "Diff 3")
+    }
+  }
+
+  test("filter only selects predicate-satisfying elements") {
+    new TestSets {
+      val u = union(s1, s2)
+      val filteredSet = filter(u, x => x % 2 == 0) // select even numbers
+      assert(!contains(filteredSet, 1), "Filter 1")
+      assert(contains(filteredSet, 2), "Filter 2")
     }
   }
 }
