@@ -29,7 +29,7 @@ class FunSetSuite extends FunSuite {
   /**
    * Tests are written using the "test" operator and the "assert" method.
    */
-  ignore("string take") {
+  test("string take") {
     val message = "hello, world"
     assert(message.take(5) == "hello")
   }
@@ -43,14 +43,14 @@ class FunSetSuite extends FunSuite {
    * Try it out! Change the values so that the assertion fails, and look at the
    * error message.
    */
-  ignore("adding ints") {
+  test("adding ints") {
     assert(1 + 2 === 3)
   }
 
   
   import FunSets._
 
-  ignore("contains is implemented") {
+  test("contains is implemented") {
     assert(contains(x => true, 100))
   }
   
@@ -136,6 +136,32 @@ class FunSetSuite extends FunSuite {
       val filteredSet = filter(u, x => x % 2 == 0) // select even numbers
       assert(!contains(filteredSet, 1), "Filter 1")
       assert(contains(filteredSet, 2), "Filter 2")
+    }
+  }
+
+  test("forall checks if all elements satisfy the predicate") {
+    new TestSets {
+      val s = union(union(s1, s2), s3)    // Set(1, 2, 3)
+      assert(forall(s, x => x > 0), "All elements are greater than 0")
+      assert(!forall(s, x => x % 2 == 0), "Not all elements are even")
+    }
+  }
+
+  test("exists checks if there is at least one element that satisfies the predicate") {
+    new TestSets {
+      val s = union(union(s1, s2), s3)
+      assert(exists(s, x => x % 2 == 0), "There is at least one even element")
+      assert(!exists(s, x => x > 3), "No element is greater than 3")
+    }
+  }
+
+  test("map applies the given function to each element and returns the set") {
+    new TestSets {
+      val s = union(union(s1, s2), s3)
+      val mappedSet = map(s, x => x * 2)    // doubles each element
+      assert(contains(mappedSet, 2), "Mapped set contains 2")
+      assert(contains(mappedSet, 4), "Mapped set contains 4")
+      assert(contains(mappedSet, 6), "Mapped set contains 6")
     }
   }
 }
