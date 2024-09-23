@@ -76,3 +76,71 @@
 
 소프트웨어를 짜는 행위는 여느 글짓기와 비슷하다. 초안은 대개 서투르고 어수선하므로 원하는 대로 읽힐 때까지 말을 다듬고 문장을 고치고 문단을 정리한다.
 Master programmer는 시스템을 (구현할) 프로그램이 아니라 (풀어갈) 이야기로 여긴다.
+
+---
+
+### Ch4: Comments
+
+주석은 코드의 정보를 전달하는 데 있어 그 어떤 정보보다 유용하게 작용하기도 하고, 없는 것보다 못한 상황을 만들기도 한다.
+그러나 꼭 기억해둬야 할 점이 있다면, 코드의 의도를 충분히 드러낼 수 있다면 주석이 없는 상태가 곧 최고의 상태라는 것이다. 
+주석은 어디까지나 프로그래밍 언어만으로 의도를 표현하는 데 실패했을 때 이를 만회하기 위한 수단으로, 좋은 프로그래밍 습관을 위해서라면 
+주석을 가능한 줄이도록 꾸준히 노력해야 한다.
+
+- [ ] Are they necessary?
+
+- [ ] Are the comments clear and useful?
+
+- [ ] Do they explain the why, not the how?
+
+```
+• Comments do not make up for bad code
+• Good comments 
+  └ legal, informative, explains intent, clarification, Warning, TODO, amplification
+• Bad comments
+  └ mumbling, redundant, misleading, mandated, noise
+• Don't use comment if there's a way with functions & variables
+• No too much information
+```
+
+정보를 제공하거나, 의도를 설명하거나, 결과를 경고하거나, 중요성을 강조하는 등 사용함에 있어 유익한 결과를 불러오는 좋은 주석들도 존재한다.
+그러나 이러한 내용을 작성할 때조차도 함수의 이름을 변경하는 등의 방식으로 주석을 사용하지 않고 코드만으로 같은 목적을 달성할 수 있다면, 주석의 사용은
+지양하는 것이 좋다. 프로그래밍 실력이 미흡한 경우 더더욱 부실한 코드 구조를 주석의 설명으로 메꾸고자 나쁜 주석을 달게 되는 경우가 발생하기에, 
+주석을 넣기 전에는 항상 그 필요성을 한 번 더 생각해보자.
+
+또 한가지 생각해볼 점은 주석의 분량이다. 주석 또한 전체 프로그램 코드에서 자리를 차지하는 글귀이고, 코드를 보는 사람이 읽게 되는 부분이다.
+주석의 길이가 길어질수록 전체 코드를 읽는 시간 또한 늘어지게 되고, clean code와 거리가 멀어지게 되는 건 당연하다.
+
+코드의 내용을 설명하는 주석을 고민하는 대신에, 코드가 그 자체로 표현력을 가지도록 수정할 수 있는 방법을 고민해보자.
+정말로 좋은 주석은, 주석을 달지 않을 방법을 찾아낸 주석이다.
+
+---
+
+### Ch7: Error Handling
+
+오류 처리는 프로그램에 반드시 필요한 요소 중 하나로, 무언가 잘못되어 발생한 오류를 바로 잡을 책임은 프로그래머에게 있다.
+그러나 이러한 오류 처리 코드는 수많은 위치에서 다양하게 동작해야 하기에, 복잡한 형태와 구조로 여기저기 분포해 있고, 
+자칫 독자로 하여금 프로그램 논리를 이해하기 어렵게 만든다.
+이런 상황을 방지하고 높은 안정성과 유지보수성을 지닌 clean code를 작성하기 위해, 오류 처리는 체계적인 방법 하에서 깔끔하게 이루어져야 한다.
+
+오류 코드 대신 예외(Exception)를 사용하는 것은 가장 효과적인 오류 처리 방법이다. 이는 프로그램의 알고리즘과 
+오류 처리 알고리즘을 분리하기에 읽기도 편하고 각 개념을 독립적으로 살펴보며 조정할 수 있다.
+
+- [ ] Are exceptions used instead of error codes to handle errors?
+
+- [ ] Are error messages clear and helpful for diagnosing issues?
+
+- [ ] Are null values avoided in favor of throwing exceptions?
+
+```
+• Use exceptions rather than return codes
+• Try-Catch-Finally statement
+• Use unchecked exceptions
+• Provide context with exceptions
+• Don't return/pass Null
+```
+
+예외 사용 시 다음 사항을 고려하는 것이 유용하다. 메서드 선언과 함께 메서드가 반환할 예외를 모두 열거하는 형식의 
+checked exception은 때로는 장점이 있지만, Open Closed Principle을 위반하는 구현이기에 일반적으로 바람직하지 못하다.
+대부분의 경우 unchecked exception을 사용하는 편이 낫다. 또 한 가지는 null의 반환/전달을 피하라는 것이다. null의 사용을 
+가정하게 되면 NullPointerException을 피하기 위해 모든 null 발생 가능 구간에서 이를 체크해주어야 하고, 이는 코드의 명료함과 안정성을 
+크게 낮추게 된다.
