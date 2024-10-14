@@ -92,7 +92,26 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = ???
+  def combinations(occurrences: Occurrences): List[Occurrences] = {
+    // start from an empty occurrence
+    val emptyOcc = List(List[(Char, Int)])()
+
+    // for comprehension of
+    // occurrences.foldLeft(emptyOcc) { combination between accumulated subsets (accSubsets) and next character occurrence component (charOcc) }
+    // for each subset in acc and each freq, create new subsets by adding character occurrence to existing subsets, using for comprehension
+    occurrences.foldLeft(emptyOcc) {
+      (accSubsets, charOcc) => {
+        val (char, maxFreq) = charOcc
+        val newSubsets = for {
+          subsets <- accSubsets
+          freq <- 1 to maxFreq
+        } yield ((char, freq) :: subsets)
+
+        accSubsets ::: newSubsets
+      }
+    }.map(_.sorted)
+     .distinct
+  }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    * 
