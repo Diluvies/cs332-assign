@@ -95,7 +95,6 @@ object Anagrams {
   def combinations(occurrences: Occurrences): List[Occurrences] = {
     // start from an empty occurrence
     val emptyOcc = List(List[(Char, Int)]())
-    //val emptyOcc = List(Nil)
 
     // for comprehension of
     // occurrences.foldLeft(emptyOcc) { combination between accumulated subsets (accSubsets) and next character occurrence component (charOcc) }
@@ -188,15 +187,43 @@ object Anagrams {
         //    dictionaryByOccurrences.getOrElse(allSubSets, Nil).flatMap { wordAnagramList =>
         //      occurrenceAnagrams(subtract(occurrences, allSubsets)).map { restAnagramList =>
         //        wordAnagramList :: restAnagramList }}}
-        for {
+        lazy val anagrams = for {
           allSubsets <- combinations(occurrences)
           wordAnagramList <- dictionaryByOccurrences.getOrElse(allSubsets, Nil)
-          restAnagramList <-occurrenceAnagrams(subtract(occurrences, allSubsets))
+          restAnagramList <- occurrenceAnagrams(subtract(occurrences, allSubsets))
         } yield wordAnagramList :: restAnagramList
+
+        anagrams
       }
     }
 
     val sentenceOcc = sentenceOccurrences(sentence)
     occurrenceAnagrams(sentenceOcc)
+  }
+
+  /** Returns a list of all anagram sentences of the given sentence, but with memoization. */
+  def sentenceAnagramsMemo(sentence: Sentence): List[Sentence] = {
+    // to add new (occurrences, anagrams) pair, we must use mutable Map
+    val cache = scala.collection.mutable.Map[Occurrences, List[Sentence]]()
+
+    def occurrenceAnagramsMemo(occurrences: Occurrences): List[Sentence] = {
+      if (occurrences.isEmpty)
+        List(Nil)
+      else if (cache.contains(occurrences))
+        cache(occurrences)
+      else {
+        lazy val anagrams = for {
+          allSubsets <- combinations(occurrences)
+          wordAnagramList <- dictionaryByOccurrences.getOrElse(allSubsets, Nil)
+          restAnagramList <- occurrenceAnagramsMemo(subtract(occurrences, allSubsets))
+        } yield wordAnagramList :: restAnagramList
+
+        cache += (occurrences -> anagrams)
+        anagrams
+      }
+    }
+
+    val sentenceOcc = sentenceOccurrences(sentence)
+    occurrenceAnagramsMemo(sentenceOcc)
   }
 }
