@@ -62,7 +62,7 @@ object Anagrams {
    *
    */
   lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = {
-    word.groupBy(wordOccurrences)
+    dictionary.groupBy(wordOccurrences)
   }
 
   /** Returns all the anagrams of a given word. */
@@ -94,7 +94,8 @@ object Anagrams {
    */
   def combinations(occurrences: Occurrences): List[Occurrences] = {
     // start from an empty occurrence
-    val emptyOcc = List(List[(Char, Int)])()
+    val emptyOcc = List(List[(Char, Int)]())
+    //val emptyOcc = List(Nil)
 
     // for comprehension of
     // occurrences.foldLeft(emptyOcc) { combination between accumulated subsets (accSubsets) and next character occurrence component (charOcc) }
@@ -105,7 +106,7 @@ object Anagrams {
         val newSubsets = for {
           subsets <- accSubsets
           freq <- 1 to maxFreq
-        } yield ((char, freq) :: subsets)
+        } yield (char, freq) :: subsets
 
         accSubsets ::: newSubsets
       }
@@ -123,7 +124,18 @@ object Anagrams {
    *  Note: the resulting value is an occurrence - meaning it is sorted
    *  and has no zero-entries.
    */
-  def subtract(x: Occurrences, y: Occurrences): Occurrences = ???
+  def subtract(x: Occurrences, y: Occurrences): Occurrences = {
+    // check precondition
+    require(y.forall {
+      case (char, freq) =>
+        x.toMap.getOrElse(char, 0) >= freq
+    }, "y must be a subset of x")
+
+    x.map {
+      case (char, freq) =>
+        (char, freq - y.toMap.getOrElse(char, 0))
+    }.filter { case (_, freq) => freq > 0 }   // no zero-entries
+  }
 
   /** Returns a list of all anagram sentences of the given sentence.
    *  
@@ -165,6 +177,26 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+    // recursive function that returns anagrams of given occurrence list, word by word, for all subsets
+    def occurrenceAnagrams(occurrences: Occurrences): List[Sentence] = {
+      if (occurrences.isEmpty)
+        List(Nil)
+      else {
+        // for comprehension of overlapping map function:
+        // combinations(occurrences).flatMap { allSubsets =>
+        //    dictionaryByOccurrences.getOrElse(allSubSets, Nil).flatMap { wordAnagramList =>
+        //      occurrenceAnagrams(subtract(occurrences, allSubsets)).map { restAnagramList =>
+        //        wordAnagramList :: restAnagramList }}}
+        for {
+          allSubsets <- combinations(occurrences)
+          wordAnagramList <- dictionaryByOccurrences.getOrElse(allSubsets, Nil)
+          restAnagramList <-occurrenceAnagrams(subtract(occurrences, allSubsets))
+        } yield wordAnagramList :: restAnagramList
+      }
+    }
 
+    val sentenceOcc = sentenceOccurrences(sentence)
+    occurrenceAnagrams(sentenceOcc)
+  }
 }
