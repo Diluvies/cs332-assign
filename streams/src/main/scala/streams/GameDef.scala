@@ -31,12 +31,13 @@ trait GameDef {
    *  
    *   x axis
    */
-  case class Pos(x: Int, y: Int) {
+  // Renamed x to row, y to col
+  case class Pos(row: Int, col: Int) {
     /** The position obtained by changing the `x` coordinate by `d` */
-    def dx(d: Int) = copy(x = x + d)
+    def dRow(d: Int) = copy(row = row + d)
 
     /** The position obtained by changing the `y` coordinate by `d` */
-    def dy(d: Int) = copy(y = y + d)
+    def dCol(d: Int) = copy(col = col + d)
   }
 
   /**
