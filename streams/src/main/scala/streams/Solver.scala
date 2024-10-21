@@ -72,7 +72,7 @@ trait Solver extends GameDef {
   def from(initial: Stream[(Block, List[Move])],
            explored: Set[Block]): Stream[(Block, List[Move])] = {
     if (initial.isEmpty)
-      Stream.empty
+      Stream.Empty
     else {
       val newPath = for {
         (block, history) <- initial
@@ -89,7 +89,7 @@ trait Solver extends GameDef {
    * The stream of all paths that begin at the starting block.
    */
   lazy val pathsFromStart: Stream[(Block, List[Move])] = {
-    initial = Stream((startBlock, List[Move]()))
+    val initial = Stream((startBlock, List[Move]()))
     from(initial, Set(startBlock))
   }
 
@@ -98,7 +98,7 @@ trait Solver extends GameDef {
    * with the history how it was reached.
    */
   lazy val pathsToGoal: Stream[(Block, List[Move])] = {
-    pathFromStart.filter {
+    pathsFromStart.filter {
       case (block, _) => done(block)
     }
   }
@@ -112,7 +112,7 @@ trait Solver extends GameDef {
    * position.
    */
   lazy val solution: List[Move] = pathsToGoal match {
-    case Stream.empty => Nil
+    case Stream.Empty => Nil
     case ((_, history) #:: _) => history.reverse    // (_, history) is a pathToGoal, history is a list of moves from last-to-first order
   }
 }

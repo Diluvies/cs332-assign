@@ -68,28 +68,27 @@ class BloxorzSuite extends FunSuite {
   // Implement example test case for:
   // Solving the Game - Finding Neighbors
   test("test neighborsWithHistory") {
-    val initBlock = Block(Pos(1, 1), Pos(1, 1))
-    val history = List(Left, Up)
-    val expected = Set(
-      (Block(Pos(1, 2), Pos(1, 3)), List(Right, Left, Up)),
-      (Block(Pos(2, 1), Pos(3, 1)), List(Down, Left, Up))
-    )
+    new Level1 {
+      val history = List(Left, Up)
+      val expected = startBlock.legalNeighbors.map {
+        case (block, move) => (block, move :: history)
+      }.toSet
 
-    assert(neighborsWithHistory(initBlock, history).toSet == expected)
+      assert(neighborsWithHistory(startBlock, history).toSet == expected)
+    }
   }
 
   // Implement example test case for:
   // Solving the Game - Avoiding Circles
-  test("test neighborsWithHistory") {
-    val neighborsWithHistorySet = Set(
-      (Block(Pos(1, 2), Pos(1, 3)), List(Right, Left, Up)),
-      (Block(Pos(2, 1), Pos(3, 1)), List(Down, Left, Up))
-    )
-    val exploredBlockSet = Set(Block(Pos(1, 2), Pos(1, 3)), Block(Pos(1, 1), Pos(1, 1)))
-    val expected = Set(
-      (Block(Pos(2, 1), Pos(3, 1)), List(Down, Left, Up))
-    )
+  test("test newNeighborsOnly") {
+    new Level1 {
+      val history = List(Left, Up)
+      val explored = Set(startBlock.right, startBlock)
+      val expected = Set(
+        (startBlock.down, Down :: history)
+      )
 
-    assert(newNeighborsOnly(neighborsWithHistorySet.toStream, exploredBlockSet).toSet == expected)
+      assert(newNeighborsOnly(neighborsWithHistory(startBlock, history), explored).toSet == expected)
+    }
   }
 }
