@@ -64,4 +64,17 @@ class BloxorzSuite extends FunSuite {
       assert(solution.length == optsolution.length)
     }
   }
+
+  // Implement example test case for:
+  // Solving the Game - Finding Neighbors
+  test("test neighborsWithHistory") {
+    val initBlock = Block((Pos(1, 1), Pos(1, 1)))
+    val history = List(Left, Up)
+    val neighborsWithHistorySet = Set(
+      (Block(Pos(1, 2), Pos(1, 3)), List(Right, Left, Up)),
+      (Block(Pos(2, 1), Pos(3, 1)), List(Down, Left, Up))
+    )
+
+    assert(neighborsWithHistory(initBlock, history).toSet == neighborsWithHistorySet)
+  }
 }
