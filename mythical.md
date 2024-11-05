@@ -34,6 +34,7 @@
 
 프로그래밍은 많은 노력이 녹아내린 채 실패한 타르 구덩이인 동시에, 그 자체로 기쁨과 슬픔을 갖춘 창의적인 활동이기도 하다.
 
+#
 
 ---
 
@@ -93,6 +94,119 @@
 늦어진 소프트웨어 프로젝트를 해결하기 위해서는 인력을 추가하기보다 일정을 재조정하거나 작업을 원래 계획보다 축소하는 것이 더 효과적이라고
 말한다.
 
+#
+
+---
+
+### Ch3: The Surgical Team
+
+프로그래머의 실력에 따라 생산성과 속도의 차이가 발생한다는 것은 쉽게 유추해볼 수 있는 사실이다. 이에 대한 실제 실험 결과 
+숙련된 프로그래머 그룹과 평범한 그룹 간의 생산성 차이가 10배, 속도 차이는 5배로 나타나며 사람들이 일반적으로 생각하던 것보다도 
+훨씬 큰 차이가 나타났다. 더불어 앞서 살펴본 대로 참여인원이 늘어날수록 증가하는 communication 관련 문제들 역시 프로젝트의 시간 소요를
+높이는 핵심적인 요소이기에 프로젝트를 위한 팀을 꾸릴 때에는 최대한 적은 수의 뛰어난 프로그래머들로 구성된 "소수 정예"를 추구하는 것이 좋아보인다.
+
+그러나, 현실에서 해결해야하는 문제들 중에는 정말 방대한 규모의 프로젝트 또한 존재하고, 이러한 프로젝트를 소수 인원의 팀으로 운용하는 것은 
+절대적인 시간의 부족을 야기한다. 아무리 생산성과 효율성을 끌어올려도 소수 인원으로는 정해진 시간 내에 완성하는 것이 불가능한 이런 프로젝트를 위해
+저자는 새로운 해결책을 제시한다.
+
+- Mills's Proposal  
+Harlan Mills가 제시한 방법은 업무의 각 segment들을 **Surgical Team** 처럼 구성된 프로그래머 팀들이 처리한다는 것이다.
+다시말해, 실제 수술을 집도하는 멤버 하나와, 이의 효율성과 생산성을 최대로 끌어올리는 서포터 멤버들로 팀을 구성하는 것이다. 10명 팀을 기준으로 
+각 팀원들의 역할은 다음과 같이 뚜렷이 특화되어 분류할 수 있다.
+    - Surgeon  
+    Chief programmer에 해당하는 역할로 기능 및 성능 사양의 정의, 프로그램 설계, 코딩, 테스팅, documentation 작성 등 개발과정의 핵심적인
+    부분을 담당한다. 상당한 수준의 지식과 경험을 필요로 하는 위치.
+    - Copilot  
+    Surgeon의 대리에 해당하는 역할로, 일반적으로는 디자인 단계에서 surgeon에게 아이디어나 조언을 제공한다.
+    코드 전체를 잘 알고 있고 surgeon의 보험 역할로서 긴급상황 시 그의 역할을 대신 수행할 수 있지만 코드에 대한 책임을 지지는 않는다.
+    - Administrator  
+    Money, people, space, machine을 다루는 전문 관리자의 역할로, surgeon이 이러한 문제들에 시간을 빼앗기지 않도록 해준다.
+    - Editor  
+    Documentation의 작성은 surgeon이 수행한다. Editor는 surgeon이 작성한 초안을 받아 비평, 수정, 참고 문헌 제공 및 documentation 작성의
+    전반적인 과정을 검토/감독하는 역할을 수행한다.
+    - Secretary
+    Secretary는 product 관련 서신이나 non-product 업무를 처리하는 보조 역할로, Administrator와 Editor 각각에게 배정되어 총 2명이 요구된다.
+    - Program Clerk  
+    팀의 모든 technical record를 유지한다. 모든 computer input은 clerk에게 기록되고 output은 파일링 및 인덱싱되어 관리된다. 전반적으로 
+    팀의 사무 작업을 수행하는 역할로, 작업물의 보호 및 체계화에 기여한다.
+    - Toolsmith  
+    File-editing, text-editing, interactive debugging service를 위해 팀이 필요로 하는 특화된 tool을 제작, 유지 및 업그레이드하는 역할이다.
+    중앙에서 제공하는 서비스의 우수성과 무관하게, 이러한 "특수 도구"의 운용을 위해 필요한 역할이다.
+    - Tester  
+    기능 사양을 기반으로 testcase를 고안하여 시스템의 robustness를 검사하는 적대자의 역할과 디버깅 작업을 위한 테스트 데이터를 생성해 
+    프로그램이 문제 없이 작동하는지 확인하는 조력자의 역할을 수행한다.
+    - Language lawyer  
+    프로그래밍 언어에 숙달하여 복잡한 코딩 작업을 효율적으로 처리할 수 있는 방법을 찾고 이에 대한 조언을 surgeon에게 제공한다.
+  
+#
+
+---
+
+### Ch16: No Silver Bullet  
+### - Essence and Accident in Software Engineering
+
+본 챕터에서 저자는 software productivity, reliability, 그리고 simplicity를 획기적으로 개선(breakthrough)할 수 있는 
+단일 기술 혹은 관리 혁신은 존재하지 않는다고 주장한다. 그는 해결해야 할 문제의 복잡성을 문제에 내재된 Essential Complexity와 기술적 문제로 인해
+발생하는 Accidental Complexity로 구분하며 과거의 생산성 향상은 accidental complexity를 줄이는 데서 비롯되었으나 essential complexity의 
+해결을 위해서는 다른 접근 방식이 필요하다고 이야기한다.
+
+그는 이에 대한 전략으로 exploiting mass market, using rapid prototyping, growing software organically, 그리고 
+identifying and nurturing great conceptual designers를 제안하며 특히 뛰어난 디자이너의 중요성과 그에 대한 대우를 강조한다.
+
+1. Essential Difficulties  
+프로그래밍 문제에 내재되어있는 본질적인 어려움은 complexity, conformity, changeability, invisibility로 정리할 수 있다.
+   - Complexity는 소프트웨어의 복잡성으로 인해 각 구성 요소가 다르게 상호작용하면서 선형 이상의 복잡성을 초래하는 것을 의미한다.
+   - Conformity는 소프트웨어가 다양한 인터페이스와 시스템에 맞춰져야 하는 부담을 나타낸다. 이러한 복잡성은 주로 인간의 설계에 의해 발생한다.
+   - Changeability는 소프트웨어가 지속적으로 변화의 압력을 받는다는 사실을 의미한다. 이는 소프트웨어의 기능과 사용자의 요구에 따라 변경이 쉬운 특성 때문이다.
+   - Invisibility는 소프트웨어가 공간에 내재되지 않아 쉽게 시각화할 수 없다는 점을 의미하며, 이는 디자인과 커뮤니케이션 과정을 어렵게 만든다.
+
+
+2. Past Breakthroughs Solved Accidental   
+과거 소프트웨어 생산성에서 breakthrough를 이루어낸 사례는 다음의 accidental difficulty에 대한 극복이다.
+    - High-level languages: 고급 언어를 사용함으로써 프로그램의 추상적 구성 요소를 구현하고 하위 복잡성을 제거해 생산성과 신뢰성을 크게 향상시켰다.
+    - Time-sharing: 시간을 공유하여 즉시성을 유지하고 시스템 응답 시간을 단축시켜 복잡한 시스템의 전체적인 이해를 돕는다.
+    - Unified programming environments: 통합 프로그래밍 환경을 통해 프로그램 간의 상호 운용성을 개선하고 생산성을 높였다.
+
+
+3. Hopes for the Silver  
+기술적 발전을 이뤄낼 수 있는 잠재적인 **Silver Bullet**으로 여겨지는 요소들과, 이들의 한계점은 다음과 같다.
+    - High-level language advances (Ada, ...)  
+      Ada와 같은 고급 언어는 소프트웨어 생산성과 신뢰성을 향상시키지만, essential complexity를 해결하지는 못한다. 이들은 주로 교육과 소프트웨어 설계 기술 도입에 기여한다.
+    - Object-oriented programming  
+      객체 지향 프로그래밍은 추상 데이터 타입과 계층적 타입을 통해 디자인 표현의 accidental complexity를 제거하지만, essential complexity에는 영향을 미치지 못한다.
+    - Artificial Intelligence  
+      인공지능 기술은 문제 해결 방식을 인간처럼 시뮬레이션하여 개선을 제공하지만, 소프트웨어 생산성에 대한 혁신적인 돌파구를 제공하지는 못한다.
+    - Expert systems  
+      일반화된 추론 엔진과 규칙에 기반해 입력값에 대한 논리적 결과를 탐색하는 기능을 탑재한 전문가 시스템은 복잡한 문제 해결을 지원하지만, 상당한 양의 기반 지식을 요구한다.
+    - "Automatic" programming  
+      자동 프로그래밍은 문제 사양에서 직접 프로그램을 생성하는 기술로, 주로 특수한 문제 영역에서만 효과적이며 일반적인 소프트웨어 시스템에는 한계가 있다.
+    - Graphical programming  
+      그래픽 프로그래밍은 소프트웨어 설계에 컴퓨터 그래픽을 적용하는 접근 방식으로, 현재까지는 설득력 있는 결과물이 나오지 않았다.
+    - Program verification  
+      프로그램 검증은 보안 운영체제 커널과 같은 영역에서 강력한 도구가 될 수 있지만, 오류를 완전히 제거하거나 근본적인 사양 문제를 해결하지는 못한다.
+    - Environments and tools  
+      통합 데이터베이스 시스템과 스마트 에디터와 같은 향상된 프로그래밍 환경은 생산성과 신뢰성을 높일 수 있지만, 본질적으로 제공하는 이익은 한정적이다.
+    - Workstations  
+      개인 workstation의 성능과 메모리 용량 증가로 인한 향상은 분명 있지만, 프로그램 작성과 편집의 속도 향상에는 한계가 있어 대단한 수준의 향상을 기대할 수는 없다.
+
+
+4. Promising Attacks on the Conceptual Essence  
+소프트웨어 문제의 작업 구성 요소 개선에만 집중해서는 생산성을 크게 향상시킬 수 없기에, 결국 문제의 개념적 본질을 해결하는 것이 필수적이다.
+   - Buy versus build  
+   소프트웨어를 처음부터 build하는 것보다 기성 소프트웨어 제품을 buy하는 것이 점점 더 실용적이고 비용면에서 효율적이어지고 있다. 소프트웨어 mass market이 부상하면서 
+   맞춤형 솔루션을 개발하는 것보다 소프트웨어를 구입하는 것이 더 경제적이고 유지 관리가 용이해졌으며, 이는 많은 사용자가 서로 개발 비용을 공유함으로써 생산성의 향상을 가져온다.
+   - Requirements Refinement and Rapid Prototyping  
+   소프트웨어를 설계할 때 가장 어려운 부분은 설계 목표를 정확히 정의하는 것으로, 고객은 종종 자신이 원하는 것을 자세히 알지 못하기 때문에 
+   제품 요구 사항을 반복적으로 물으며 상황을 개선하는 것이 중요하다. 신속한 프로토타이핑은 conceptual structure를 시각화하고 테스트하여 고객이 
+   요구 사항을 구체화할 수 있도록 도와주며, 이를 통해 소프트웨어 문제의 본질을 해결하고 프로그램의 사양이 사용 목적에 따라 정확히 정해짐을 보장한다.
+   - Incremental Development  
+   점진적 개발은 소프트웨어의 구축에 더해 성장시키는 것을 포함하는 접근 방식으로, 더미 subprogram을 호출하는 시스템에서 시작해
+   점진적으로 설계를 구체화하는 top-down design을 필요로 한다. 해당 방법은 프로그래밍의 모든 단계에서 easy backtracking, early prototyping, continuous system functionality를
+   제공하는 등의 상당한 개선 효과가 입증되었으며, 덤으로 개발팀의 사기와 열정도 향상된다.
+   - Great Designers  
+   소프트웨어 디자인을 개선하려면 창의적인 프로세스를 통해 우수하고 효율적인, '우아한' 솔루션을 만들어내는 훌륭한 디자이너를 양성하는 것이 중요하다.
+   좋은 디자인 방식을 가르칠 수는 있지만 진정 뛰어난 디자인은 타고난 재능을 가진 디자이너에게서 나온다. 이를 위해 조직은 훌륭한 디자이너를 인정 및 육성해야 하며,
+   뛰어난 디자이너들을 조기에 발굴하고 멘토링을 제공하며 지속적인 경력 개발을 제공하는 것이 필수적이다.
 
 
 
