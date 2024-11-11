@@ -58,7 +58,10 @@ package object nodescala {
     def delay(t: Duration): Future[Unit] = {
       val promise = Promise[Unit]()
       Future {
-        Await.result(Future.never, t)
+        // Await.result(Future.never, t)
+        blocking {
+          Thread.sleep(t.toMillis)
+        }
         promise.success(())   // () is the only value of type Unit
       }
       promise.future
@@ -109,12 +112,8 @@ package object nodescala {
      */
     def continueWith[S](cont: Future[T] => S): Future[S] = {
       val promise = Promise[S]()
-      f.onComplete{ _ =>
-        try {
-          promise.success(cont(f))
-        } catch {
-          case exception: Throwable => promise.failure(exception)   // handle exception as failure
-        }
+      f.onComplete{
+        case tryValue => promise completeWith Future(cont(f))
       }
       promise.future
     }
@@ -127,12 +126,8 @@ package object nodescala {
      */
     def continue[S](cont: Try[T] => S): Future[S] = {
       val promise = Promise[S]()
-      f.onComplete{ tryValue =>
-        try {
-          promise.success(cont(tryValue))
-        } catch {
-          case exception: Throwable => promise.failure(exception)
-        }
+      f.onComplete{
+        case tryValue => promise complete Try(cont(tryValue))
       }
       promise.future
     }
