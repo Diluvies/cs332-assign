@@ -56,21 +56,20 @@ trait NodeScala {
     val listenerSubscription = listener.start()
 
     // 2, 3) create a cancellation token and asynchronously process request
-    def processRequest(token: cancellationToken): Unit = {
-      if (token.nonCancelled) {
-        listener.nextRequest onComplete{
-          case Success((request, exchange)) =>
-            respond(exchange, token, handler(request))
-            processRequest(token)
-          case Failure(exception) =>
-            throw exception
+    val runSubscription = Future.run() { token =>
+      Future {
+        while(token.nonCancelled) {
+          val requestFuture = listener.nextRequest()
+          requestFuture.foreach {
+            case (request, exchange) =>
+              respond(exchange, token, handler(request))
+          }
         }
       }
     }
-    Future.run()(token => processRequest(token))
 
     // return subsrcription
-    listenerSubscription
+    Subscription(listenerSubscription, runSubscription)
   }
 
 }
